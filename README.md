@@ -1,3 +1,3 @@
 # SQL
 
-# https://www.windowfunctions.com/
+https://www.windowfunctions.com/
