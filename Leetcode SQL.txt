@@ -1,0 +1,79 @@
+1821. Find Customers With Positive Revenue this Year
+
+select customer_id 
+from Customers
+where revenue > 0 and year = 2021
+
+
+1757. Recyclable and Low Fat Products
+
+select product_id 
+from Products
+where low_fats = "Y" and recyclable = "Y"
+
+
+178. Rank Scores
+
+select score as Score, dense_rank() over(order by score desc) as `Rank`
+from Scores
+
+
+570. Managers with at Least 5 Direct Reports
+
+select Name 
+from Employee
+where Id in
+(select ManagerId
+from Employee
+group by ManagerId
+Having count(distinct Id) >= 5)
+
+
+574. Winning Candidate
+
+select t1.Name
+from candidate t1
+inner join Vote t2
+on t1.id = t2.CandidateId
+group by t1.Name
+order by count(t2.id) desc
+limit 1;
+
+
+1077. Project Employees III
+
+select t3.project_id, t3.employee_id
+from (select t1.project_id, t1.employee_id, t2.experience_years, 
+max(experience_years) over (partition by project_id) as max_years
+from Project t1 
+left join Employee t2
+on t1.employee_id = t2.employee_id) as t3
+where t3.experience_years = t3.max_years
+
+
+1045. Customers Who Bought All Products
+
+select distinct customer_id 
+from Customer
+group by customer_id
+Having count(distinct product_key) = (select count(distinct product_key) from Product)
+
+
+1112. Highest Grade For Each Student
+
+select t4.student_id, t4.course_id, t4.grade
+from (select student_id, course_id, grade, row_number() over(partition by student_id order by grade desc, course_id) as max_grade
+from Enrollments) t4
+where t4.max_grade = 1
+
+
+
+626. Exchange Seats
+
+SELECT
+    s1.id, COALESCE(s2.student, s1.student) AS student
+FROM
+    seat s1
+        LEFT JOIN
+    seat s2 ON ((s1.id + 1) ^ 1) - 1 = s2.id
+ORDER BY s1.id;
